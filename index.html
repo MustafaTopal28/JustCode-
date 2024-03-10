@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notification Test</title>
+  </head>
+  <body>
+    <h1>Notification Test</h1>
+    <button onclick="showNotification()">Afficher la notification</button>
+    <audio id="notificationSound" src="/assets/sounds/Just-Do-It.mp3"></audio>
+    <script>
+      function showNotification() {
+        if (!("Notification" in window)) {
+          alert("Ce navigateur ne prend pas en charge les notifications.");
+        } else if (Notification.permission === "granted") {
+          // Si la permission est déjà accordée
+          const notificationSound =
+            document.getElementById("notificationSound");
+          notificationSound.play(); // Jouer le son
+          new Notification("Bonjour !", {
+            body: "Ta coder aujourd'hui ?",
+          });
+        } else if (Notification.permission !== "denied") {
+          // Demander la permission si elle n'a pas été refusée
+          Notification.requestPermission().then(function (permission) {
+            if (permission === "granted") {
+              const notificationSound =
+                document.getElementById("notificationSound");
+              notificationSound.play(); // Jouer le son
+              new Notification("Permission accordée !", {
+                body: "Vous allez maintenant recevoir des notifications.",
+              });
+            }
+          });
+        }
+      }
+
+      // Planifier l'affichage de la notification toutes les 5 secondes
+      setInterval(showNotification, 240000); // 5000 ms = 5 secondes
+    </script>
+  </body>
+</html>
